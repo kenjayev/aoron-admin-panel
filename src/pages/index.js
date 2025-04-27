@@ -1,0 +1,9 @@
+export { default as Products } from "./Products";
+export { default as Category } from "./Category";
+export { default as Discount } from "./Discount";
+export { default as Sizes } from "./Sizes";
+export { default as Colors } from "./Colors";
+export { default as Faq } from "./Faq";
+export { default as Contact } from "./Contact";
+export { default as Team } from "./Team";
+export { default as News } from "./News";

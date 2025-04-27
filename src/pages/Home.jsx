@@ -1,18 +1,18 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Menu from "../components/Menu";
 
 const Home = () => {
-  const navigate = useNavigate();
-  const logoutHandler = () => {
-    localStorage.removeItem("access_token");
-    navigate("/login");
-  };
   return (
-    <div>
-      Home{" "}
-      <button className="border border-gray-500" onClick={logoutHandler}>
-        Logout
-      </button>
+    <div className="h-screen w-full overflow-hidden flex">
+      <Menu />
+      <div className="min-h-full ml-62 flex-1 bg-gray-100">
+        <Header />
+        <div className="p-6">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };

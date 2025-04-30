@@ -108,7 +108,7 @@ const Category = () => {
       .then((data) => {
         if (data.success) {
           toast.success(data.data.message);
-          addCategory();
+          getCategory();
         } else {
           console.log(data.message);
           data.message.includes(

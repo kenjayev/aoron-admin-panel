@@ -7,7 +7,9 @@ const Modal = ({ children, closeFunc }) => {
         onClick={closeFunc}
         className="absolute inset-0 -z-1 bg-black/60 cursor-pointer"
       ></div>
-      <div className="relative bg-white p-6 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-x-hidden overflow-y-auto custom-scrollbar">
+      <div
+        className={`relative bg-white p-6 rounded-lg max-w-lg w-full max-h-[90vh] overflow-x-hidden overflow-y-auto custom-scrollbar`}
+      >
         {children}
         <button
           onClick={closeFunc}

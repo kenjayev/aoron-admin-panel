@@ -115,13 +115,13 @@ const Sizes = () => {
           toast.success("Deleted Discount Successfuly");
           getSize();
         } else {
-          req.message.includes(
+          req.message?.includes?.(
             'update or delete on table "discount" violates foreign key constraint'
           )
             ? toast.error(
                 "This Discount is linked to the product. You don't delete this discount"
               )
-            : toast.success(req.message.message);
+            : toast.error(req.message.message);
         }
       })
       .catch((error) => toast.error(error.message))

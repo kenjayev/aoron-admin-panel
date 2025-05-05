@@ -131,7 +131,7 @@ const Discount = () => {
             ? toast.error(
                 "This Discount is linked to the product. You don't delete this discount"
               )
-            : toast.success(req.message.message);
+            : toast.error(req.message.message);
         }
       })
       .catch((error) => toast.error(error.message))

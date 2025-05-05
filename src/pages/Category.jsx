@@ -112,7 +112,7 @@ const Category = () => {
           getCategory();
         } else {
           console.log(data.message);
-          data.message.includes(
+          data.message?.includes?.(
             'update or delete on table "category" violates foreign key constraint'
           )
             ? toast.error("This category is linked to the product.")

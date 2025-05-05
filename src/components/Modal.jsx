@@ -2,7 +2,7 @@ import React from "react";
 
 const Modal = ({ children, closeFunc }) => {
   return (
-    <div className="fixed inset-0 flex justify-center items-center z-50 overflow-y-auto">
+    <div className="pl-0 sm:pl-10 fixed inset-0 flex justify-center items-center z-50 overflow-y-auto">
       <div
         onClick={closeFunc}
         className="absolute inset-0 -z-1 bg-black/60 cursor-pointer"

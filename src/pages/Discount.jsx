@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
@@ -111,6 +112,7 @@ const Discount = () => {
 
   // Delete Discount
   const deleteDiscount = (id) => {
+    setIsLoading(true);
     fetch(`https://back.ifly.com.uz/api/discount/${id}`, {
       method: "DELETE",
       headers: {
@@ -119,10 +121,8 @@ const Discount = () => {
     })
       .then((req) => req.json())
       .then((req) => {
-        console.log(req);
         if (req.success) {
           toast.success("Deleted Discount Successfuly");
-          closeModal();
           getDiscount();
         } else {
           req.message.includes(
@@ -132,10 +132,13 @@ const Discount = () => {
                 "This Discount is linked to the product. You don't delete this discount"
               )
             : toast.success(req.message.message);
-          closeModal();
         }
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
+        closeModal();
+      });
   };
   return (
     <section className="bg-white rounded-lg shadow-md p-6">
@@ -205,30 +208,15 @@ const Discount = () => {
         </Modal>
       )}
       {isConfirmDeleted && (
-        <Modal closeFunc={closeModal}>
-          <h3 className="text-2xl font-bold mb-3">
-            Delete Discount{" "}
-            <span className="bg-gray-300 text-base p-1 rounded-lg">
-              {editedDiscount.discount}% | {editedDiscount.started_at} |{" "}
-              {editedDiscount.finished_at}
-            </span>
-          </h3>
-          <p className="">Are you sure you want to delete this discount?</p>
-          <div className="mt-6 flex items-center justify-between">
-            <button
-              onClick={closeModal}
-              className="px-4 py-2 cursor-pointer bg-gray-500 text-white rounded-lg"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => deleteDiscount(editedDiscount?.id)}
-              className="px-4 py-2 cursor-pointer bg-red-500 text-white rounded-lg"
-            >
-              Delete
-            </button>
-          </div>
-        </Modal>
+        <ConfirmToDeleteModal
+          type="discount"
+          isLoading={isLoading}
+          closeModal={closeModal}
+          deleteFunc={() => deleteDiscount(editedDiscount?.id)}
+        >
+          {editedDiscount.discount}% | {editedDiscount.started_at} |{" "}
+          {editedDiscount.finished_at}
+        </ConfirmToDeleteModal>
       )}
       {isLoading ? (
         <Loader />

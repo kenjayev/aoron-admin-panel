@@ -144,7 +144,7 @@ const Colors = () => {
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl mb-6">Colors</h2>
+        <h2 className="text-2xl font-bold mb-6">Colors</h2>
         <button
           onClick={() => setIsOpenModal(true)}
           className="mb-5 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition"

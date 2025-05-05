@@ -127,7 +127,7 @@ const Category = () => {
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between">
-        <h2 className="text-xl font-bold mb-6">Category</h2>
+        <h2 className="text-2xl font-bold mb-6">Category</h2>
         <button
           onClick={() => setIsOpenModal(true)}
           className="cursor-pointer mb-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"

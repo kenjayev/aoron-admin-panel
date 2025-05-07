@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import { toast } from "react-toastify";
 import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
@@ -7,7 +9,8 @@ import NoData from "../components/NoData";
 
 const Contact = () => {
   const [contacts, setContacts] = useState(null);
-  const [editedColor, setEditedColor] = useState(null);
+  const [editedContact, setEditedContact] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isConfirmDeleted, setIsConfirmDeleted] = useState(false);
@@ -15,7 +18,7 @@ const Contact = () => {
 
   const closeModal = () => {
     setIsOpenModal(false);
-    setEditedColor(null);
+    setEditedContact(null);
     setIsConfirmDeleted(false);
   };
 
@@ -38,108 +41,109 @@ const Contact = () => {
   };
   useEffect(getContact, []);
 
-  // // Add New Color
-  // const addColor = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch("https://back.ifly.com.uz/api/colors", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       color_en: e.target.color_en.value,
-  //       color_ru: e.target.color_ru.value,
-  //       color_de: e.target.color_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("Color Added successfuly");
-  //         closeModal();
-  //         getColors();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(res.message.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+  // Add New Color
+  const addContact = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch("https://back.ifly.com.uz/api/contact", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        phone_number: `+${phoneNumber}`,
+        email: e.target.email.value,
+        address_ru: e.target.address_ru.value,
+        address_en: e.target.address_en.value,
+        address_de: e.target.address_de.value,
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("Contact added successfuly");
+          closeModal();
+          getContact();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message?.message);
+          toast.error(data.message.message[0]);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
 
-  // // Edit Color
-  // const editColor = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/colors/${editedColor?.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       color_en: e.target.color_en.value,
-  //       color_ru: e.target.color_ru.value,
-  //       color_de: e.target.color_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("Color Edited Successfuly");
-  //         closeModal();
-  //         getColors();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(data.message?.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+  // Edit Color
+  const editContact = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/contact/${editedContact?.id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        phone_number: `+${phoneNumber}`,
+        email: e.target.email.value,
+        address_ru: e.target.address_ru.value,
+        address_en: e.target.address_en.value,
+        address_de: e.target.address_de.value,
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("Contact Edited Successfuly");
+          closeModal();
+          getContact();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message?.message);
+          toast.error(data.message?.message[0]);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
 
-  // // Delete Color Func
-  // const deleteColor = (id) => {
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/colors/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then((req) => req.json())
-  //     .then((req) => {
-  //       if (req.success) {
-  //         toast.success("Deleted Discount Successfuly");
-  //         getColors();
-  //       } else {
-  //         req.message?.includes?.(
-  //           'update or delete on table "discount" violates foreign key constraint'
-  //         )
-  //           ? toast.error(
-  //               "This Discount is linked to the product. You don't delete this discount"
-  //             )
-  //           : toast.error(req.message.message);
-  //       }
-  //     })
-  //     .catch((error) => toast.error(error.message))
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //       closeModal();
-  //     });
-  // };
+  // Delete Color Func
+  const deleteContact = (id) => {
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/contact/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((req) => req.json())
+      .then((req) => {
+        if (req.success) {
+          toast.success("Deleted contact Successfuly");
+          getContact();
+        } else {
+          toast.error(req.message.message);
+          toast.error(req.message.message[0]);
+        }
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
+        closeModal();
+      });
+  };
 
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
@@ -156,85 +160,126 @@ const Contact = () => {
       {isOpenModal && (
         <Modal closeFunc={closeModal}>
           <h3 className="text-xl font-bold mb-4">
-            {editedColor ? "Edit" : "Add"} FAQ
+            {editedContact ? "Edit" : "Add"} Contact
           </h3>
 
-          {/* <form onSubmit={editedColor ? editColor : addColor}>
+          <form onSubmit={editedContact ? editContact : addContact}>
+            {/* ---------------- Start Phone_Number ------ ----------*/}
             <div className="mb-3">
               <label
-                htmlFor="color_en"
+                htmlFor="phone_number"
                 className="block mb-1 text-sm font-medium"
               >
-                Color (EN):
+                Phone Number:
+              </label>
+              <PhoneInput
+                country={"uz"}
+                value={editedContact?.phone_number ?? ""}
+                onChange={(value) => setPhoneNumber((prev) => value)}
+                inputStyle={{ width: "100%" }}
+                type="number"
+                placeholder="Enter phone number"
+                inputProps={{
+                  name: "phone_number",
+                  id: "phone_number",
+                  required: true,
+                }}
+              />
+            </div>
+            {/* ---------------- End Phone_Number ------ ----------*/}
+
+            {/* ---------------- Start Email ------ ----------*/}
+            <div className="mb-3">
+              <label htmlFor="email" className="block mb-1 text-sm font-medium">
+                Email:
               </label>
               <input
                 required
-                type="text"
-                name="color_en"
-                id="color_en"
-                placeholder="Color in English"
-                defaultValue={editedColor?.color_en ?? ""}
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                defaultValue={editedContact?.email ?? ""}
                 className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            {/* ---------------- End Email ------ ----------*/}
+
+            <div className="mb-3">
+              <label
+                htmlFor="address_en"
+                className="block mb-1 text-sm font-medium"
+              >
+                Address (EN):
+              </label>
+              <textarea
+                required
+                name="address_en"
+                id="address_en"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Address (EN)"
+                maxLength={200}
+                defaultValue={editedContact?.address_en ?? ""}
               />
             </div>
             <div className="mb-3">
               <label
-                htmlFor="color_ru"
+                htmlFor="address_ru"
                 className="block mb-1 text-sm font-medium"
               >
-                Color (RU):
+                Address (RU):
               </label>
-              <input
+              <textarea
                 required
-                type="text"
-                name="color_ru"
-                id="color_ru"
-                placeholder="Цвет на русском"
-                defaultValue={editedColor?.color_ru ?? ""}
+                name="address_ru"
+                id="address_ru"
                 className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Address (RU)"
+                maxLength={200}
+                defaultValue={editedContact?.address_ru ?? ""}
               />
             </div>
             <div className="mb-3">
               <label
-                htmlFor="color_de"
+                htmlFor="address_de"
                 className="block mb-1 text-sm font-medium"
               >
-                Color (DE):
+                Address (DE):
               </label>
-              <input
+              <textarea
                 required
-                type="text"
-                name="color_de"
-                id="color_de"
-                placeholder="Farbe auf Deutsch"
-                defaultValue={editedColor?.color_de ?? ""}
-                className="w-full p-2 border border-gray-300 rounded"
+                name="address_de"
+                id="address_de"
+                className="w-full p-2 border border-gray-300 rounded "
+                placeholder="Address (DE)"
+                maxLength={200}
+                defaultValue={editedContact?.address_de ?? ""}
               />
             </div>
+
             <button
               disabled={isLoading}
               className="w-full mt-4 text-white bg-green-500 p-2 text-center rounded-lg cursor-pointer disabled:cursor-progress disabled:bg-gray-400"
             >
               {isLoading
                 ? "Loading..."
-                : editedColor
-                ? "Edit Category"
-                : "Add Category"}
+                : editedContact
+                ? "Edit Contact"
+                : "Add Contact"}
             </button>
-          </form> */}
+          </form>
         </Modal>
       )}
 
       {/* Confirm Modal for Deleted Size */}
       {isConfirmDeleted && (
         <ConfirmToDeleteModal
-          type="color"
+          type="contact"
           isLoading={isLoading}
           closeModal={closeModal}
-          deleteFunc={() => deleteColor(editedColor?.id)}
+          deleteFunc={() => deleteContact(editedContact?.id)}
         >
-          {editedColor?.color_en} | {editedColor?.color_ru} |{" "}
-          {editedColor?.color_de}
+          {editedContact?.phone_number} | {editedContact?.email}
         </ConfirmToDeleteModal>
       )}
 
@@ -274,7 +319,7 @@ const Contact = () => {
                     <button
                       onClick={() => {
                         setIsOpenModal(true);
-                        setEditedColor({ ...faq });
+                        setEditedContact({ ...contact });
                       }}
                       className="px-4 py-2 mr-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition cursor-pointer"
                     >
@@ -283,7 +328,7 @@ const Contact = () => {
                     <button
                       onClick={() => {
                         setIsConfirmDeleted(true);
-                        setEditedColor({ ...faq });
+                        setEditedContact({ ...contact });
                       }}
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
                     >

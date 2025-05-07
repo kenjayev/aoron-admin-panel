@@ -7,7 +7,7 @@ import NoData from "../components/NoData";
 
 const Faq = () => {
   const [faq, setFaq] = useState(null);
-  const [editedColor, setEditedColor] = useState(null);
+  const [editedFaq, setEditedFaq] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isConfirmDeleted, setIsConfirmDeleted] = useState(false);
@@ -15,7 +15,7 @@ const Faq = () => {
 
   const closeModal = () => {
     setIsOpenModal(false);
-    setEditedColor(null);
+    setEditedFaq(null);
     setIsConfirmDeleted(false);
   };
 
@@ -36,108 +36,109 @@ const Faq = () => {
   };
   useEffect(getFaq, []);
 
-  // // Add New Color
-  // const addColor = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch("https://back.ifly.com.uz/api/colors", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       color_en: e.target.color_en.value,
-  //       color_ru: e.target.color_ru.value,
-  //       color_de: e.target.color_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("Color Added successfuly");
-  //         closeModal();
-  //         getColors();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(res.message.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+  // Add New Color
+  const addFaq = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  // // Edit Color
-  // const editColor = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/colors/${editedColor?.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       color_en: e.target.color_en.value,
-  //       color_ru: e.target.color_ru.value,
-  //       color_de: e.target.color_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("Color Edited Successfuly");
-  //         closeModal();
-  //         getColors();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(data.message?.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+    fetch("https://back.ifly.com.uz/api/faq", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        question_en: e.target.question_en.value,
+        question_ru: e.target.question_ru.value,
+        question_de: e.target.question_de.value,
+        answer_en: e.target.answer_en.value,
+        answer_ru: e.target.answer_ru.value,
+        answer_de: e.target.answer_de.value,
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("FAQ added successfuly");
+          closeModal();
+          getFaq();
+        } else {
+          toast.error("Something want Error");
+          toast.error(res.message.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
 
-  // // Delete Color Func
-  // const deleteColor = (id) => {
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/colors/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then((req) => req.json())
-  //     .then((req) => {
-  //       if (req.success) {
-  //         toast.success("Deleted Discount Successfuly");
-  //         getColors();
-  //       } else {
-  //         req.message?.includes?.(
-  //           'update or delete on table "discount" violates foreign key constraint'
-  //         )
-  //           ? toast.error(
-  //               "This Discount is linked to the product. You don't delete this discount"
-  //             )
-  //           : toast.error(req.message.message);
-  //       }
-  //     })
-  //     .catch((error) => toast.error(error.message))
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //       closeModal();
-  //     });
-  // };
+  // Edit Color
+  const editFaq = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/faq/${editedFaq?.id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        question_en: e.target.question_en.value,
+        question_ru: e.target.question_ru.value,
+        question_de: e.target.question_de.value,
+        answer_en: e.target.answer_en.value,
+        answer_ru: e.target.answer_ru.value,
+        answer_de: e.target.answer_de.value,
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("FAQ edited Successfuly");
+          closeModal();
+          getFaq();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message?.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
+
+  // Delete Color Func
+  const deleteFaq = (id) => {
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/faq/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((req) => req.json())
+      .then((req) => {
+        if (req.success) {
+          toast.success("Deleted FAQ successfuly");
+          getFaq();
+        } else {
+          toast.error(req.message.message);
+        }
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
+        closeModal();
+      });
+  };
 
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
@@ -154,85 +155,119 @@ const Faq = () => {
       {isOpenModal && (
         <Modal closeFunc={closeModal}>
           <h3 className="text-xl font-bold mb-4">
-            {editedColor ? "Edit" : "Add"} FAQ
+            {editedFaq ? "Edit" : "Add"} FAQ
           </h3>
 
-          {/* <form onSubmit={editedColor ? editColor : addColor}>
-            <div className="mb-3">
-              <label
-                htmlFor="color_en"
-                className="block mb-1 text-sm font-medium"
-              >
-                Color (EN):
+          <form onSubmit={editedFaq ? editFaq : addFaq}>
+            <div className="mb-2">
+              <label htmlFor="question_en" className="block text-gray-700">
+                Question (English)
               </label>
               <input
                 required
                 type="text"
-                name="color_en"
-                id="color_en"
-                placeholder="Color in English"
-                defaultValue={editedColor?.color_en ?? ""}
+                placeholder="Enter question in English"
+                defaultValue={editedFaq?.question_en ?? ""}
+                name="question_en"
+                id="question_en"
                 className="w-full p-2 border border-gray-300 rounded"
+                maxLength={200}
               />
             </div>
-            <div className="mb-3">
-              <label
-                htmlFor="color_ru"
-                className="block mb-1 text-sm font-medium"
-              >
-                Color (RU):
+            <div className="mb-4">
+              <label htmlFor="answer_en" className="block text-gray-700">
+                Answer (English)
+              </label>
+              <textarea
+                required
+                placeholder="Enter answer in English"
+                name="answer_en"
+                id="answer_en"
+                className="w-full p-2 border border-gray-300 rounded"
+                maxLength={500}
+                defaultValue={editedFaq?.answer_en ?? ""}
+              />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="question_ru" className="block text-gray-700">
+                Question (Russian)
               </label>
               <input
                 required
                 type="text"
-                name="color_ru"
-                id="color_ru"
-                placeholder="Цвет на русском"
-                defaultValue={editedColor?.color_ru ?? ""}
+                placeholder="Enter question in Russian"
+                name="question_ru"
+                id="question_ru"
                 className="w-full p-2 border border-gray-300 rounded"
+                maxLength={200}
+                defaultValue={editedFaq?.question_ru ?? ""}
               />
             </div>
-            <div className="mb-3">
-              <label
-                htmlFor="color_de"
-                className="block mb-1 text-sm font-medium"
-              >
-                Color (DE):
+            <div className="mb-4">
+              <label htmlFor="answer_ru" className="block text-gray-700">
+                Answer (Russian)
+              </label>
+              <textarea
+                required
+                placeholder="Enter answer in Russian"
+                name="answer_ru"
+                id="answer_ru"
+                className="w-full p-2 border border-gray-300 rounded"
+                maxLength={500}
+                defaultValue={editedFaq?.answer_ru ?? ""}
+              />
+            </div>
+
+            <div className="mb-2">
+              <label htmlFor="question_de" className="block text-gray-700">
+                Question (German)
               </label>
               <input
                 required
                 type="text"
-                name="color_de"
-                id="color_de"
-                placeholder="Farbe auf Deutsch"
-                defaultValue={editedColor?.color_de ?? ""}
+                placeholder="Enter question in German"
+                name="question_de"
+                id="question_de"
                 className="w-full p-2 border border-gray-300 rounded"
+                defaultValue={editedFaq?.question_de ?? ""}
+                maxLength={200}
               />
             </div>
+            <div className="mb-4">
+              <label htmlFor="answer_de" className="block text-gray-700">
+                Answer (German)
+              </label>
+              <textarea
+                required
+                placeholder="Enter answer in German"
+                name="answer_de"
+                id="answer_de"
+                className="w-full p-2 border border-gray-300 rounded"
+                defaultValue={editedFaq?.answer_de ?? ""}
+                maxLength={500}
+              />
+            </div>
+
             <button
               disabled={isLoading}
-              className="w-full mt-4 text-white bg-green-500 p-2 text-center rounded-lg cursor-pointer disabled:cursor-progress disabled:bg-gray-400"
+              className="w-full mt-2 text-white bg-green-500 p-2 text-center rounded-lg cursor-pointer disabled:cursor-progress disabled:bg-gray-400"
             >
-              {isLoading
-                ? "Loading..."
-                : editedColor
-                ? "Edit Category"
-                : "Add Category"}
+              {isLoading ? "Loading..." : editedFaq ? "Edit FAQ" : "Add FAQ"}
             </button>
-          </form> */}
+          </form>
         </Modal>
       )}
 
       {/* Confirm Modal for Deleted Size */}
       {isConfirmDeleted && (
         <ConfirmToDeleteModal
-          type="color"
+          type="FAQ"
           isLoading={isLoading}
           closeModal={closeModal}
-          deleteFunc={() => deleteColor(editedColor?.id)}
+          deleteFunc={() => deleteFaq(editedFaq?.id)}
         >
-          {editedColor?.color_en} | {editedColor?.color_ru} |{" "}
-          {editedColor?.color_de}
+          {editedFaq?.question_en}
         </ConfirmToDeleteModal>
       )}
 
@@ -268,7 +303,7 @@ const Faq = () => {
                     <button
                       onClick={() => {
                         setIsOpenModal(true);
-                        setEditedColor({ ...faq });
+                        setEditedFaq({ ...faq });
                       }}
                       className="px-4 py-2 mr-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition cursor-pointer"
                     >
@@ -277,7 +312,7 @@ const Faq = () => {
                     <button
                       onClick={() => {
                         setIsConfirmDeleted(true);
-                        setEditedColor({ ...faq });
+                        setEditedFaq({ ...faq });
                       }}
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
                     >

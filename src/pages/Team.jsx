@@ -7,7 +7,7 @@ import NoData from "../components/NoData";
 
 const Team = () => {
   const [team, setTeam] = useState(null);
-  const [editedFaq, setEditedFaq] = useState(null);
+  const [editedTeam, setEditedTeam] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isConfirmDeleted, setIsConfirmDeleted] = useState(false);
@@ -15,7 +15,7 @@ const Team = () => {
 
   const closeModal = () => {
     setIsOpenModal(false);
-    setEditedFaq(null);
+    setEditedTeam(null);
     setIsConfirmDeleted(false);
   };
 
@@ -36,109 +36,105 @@ const Team = () => {
   };
   useEffect(getTeam, []);
 
-  // // Add New Color
-  // const addFaq = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
+  /**************** return data from FORM *****************/
+  const getDataForm = (e) => {
+    const formData = new FormData();
+    formData.append("full_name", e.target.full_name.value);
+    formData.append("position_en", e.target.position_en.value);
+    formData.append("position_ru", e.target.position_ru.value);
+    formData.append("position_de", e.target.position_de.value);
+    formData.append("file", e.target.file.files[0]);
+    return formData;
+  };
+  /**************** return data from FORM *****************/
 
-  //   fetch("https://back.ifly.com.uz/api/faq", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       question_en: e.target.question_en.value,
-  //       question_ru: e.target.question_ru.value,
-  //       question_de: e.target.question_de.value,
-  //       answer_en: e.target.answer_en.value,
-  //       answer_ru: e.target.answer_ru.value,
-  //       answer_de: e.target.answer_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("FAQ added successfuly");
-  //         closeModal();
-  //         getFaq();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(res.message.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+  // Add New Color
+  const addTeam = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  // // Edit Color
-  // const editFaq = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/faq/${editedFaq?.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       question_en: e.target.question_en.value,
-  //       question_ru: e.target.question_ru.value,
-  //       question_de: e.target.question_de.value,
-  //       answer_en: e.target.answer_en.value,
-  //       answer_ru: e.target.answer_ru.value,
-  //       answer_de: e.target.answer_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("FAQ edited Successfuly");
-  //         closeModal();
-  //         getFaq();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(data.message?.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+    fetch("https://back.ifly.com.uz/api/team-section", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: getDataForm(e),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("Team added successfuly");
+          closeModal();
+          getTeam();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
 
-  // // Delete Color Func
-  // const deleteFaq = (id) => {
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/faq/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then((req) => req.json())
-  //     .then((req) => {
-  //       if (req.success) {
-  //         toast.success("Deleted FAQ successfuly");
-  //         getFaq();
-  //       } else {
-  //         toast.error(req.message.message);
-  //       }
-  //     })
-  //     .catch((error) => toast.error(error.message))
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //       closeModal();
-  //     });
-  // };
+  // Edit Color
+  const editTeam = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/team-section/${editedTeam?.id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: getDataForm(e),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("Team edited Successfuly");
+          closeModal();
+          getTeam();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message?.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
+
+  // Delete Color Func
+  const deleteTeam = (id) => {
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/team-section/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((req) => req.json())
+      .then((req) => {
+        if (req.success) {
+          toast.success("Deleted Team successfuly");
+          getTeam();
+        } else {
+          toast.error(req.message.message);
+        }
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
+        closeModal();
+      });
+  };
 
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
@@ -155,97 +151,81 @@ const Team = () => {
       {isOpenModal && (
         <Modal closeFunc={closeModal}>
           <h3 className="text-xl font-bold mb-4">
-            {editedFaq ? "Edit" : "Add"} FAQ
+            {editedTeam ? "Edit" : "Add"} FAQ
           </h3>
 
-          {/* <form onSubmit={editedFaq ? editFaq : addFaq}>
+          <form onSubmit={editedTeam ? editTeam : addTeam}>
             <div className="mb-2">
-              <label htmlFor="question_en" className="block text-gray-700">
-                Question (English)
+              <label htmlFor="full_name" className="block text-gray-700">
+                Full Name
               </label>
               <input
                 required
                 type="text"
-                placeholder="Enter question in English"
-                defaultValue={editedFaq?.question_en ?? ""}
-                name="question_en"
-                id="question_en"
+                placeholder="Enter full name"
+                defaultValue={editedTeam?.full_name ?? ""}
+                name="full_name"
+                id="full_name"
                 className="w-full p-2 border border-gray-300 rounded"
-                maxLength={200}
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="answer_en" className="block text-gray-700">
-                Answer (English)
+              <label htmlFor="position_en" className="block text-gray-700">
+                Position (EN)
               </label>
-              <textarea
+              <input
                 required
-                placeholder="Enter answer in English"
-                name="answer_en"
-                id="answer_en"
+                type="text"
+                placeholder="Enter position in English"
+                name="position_en"
+                id="position_en"
                 className="w-full p-2 border border-gray-300 rounded"
-                maxLength={500}
-                defaultValue={editedFaq?.answer_en ?? ""}
+                maxLength={200}
+                defaultValue={editedTeam?.position_en ?? ""}
               />
             </div>
 
             <div className="mb-2">
-              <label htmlFor="question_ru" className="block text-gray-700">
-                Question (Russian)
+              <label htmlFor="position_ru" className="block text-gray-700">
+                Position (RU)
               </label>
               <input
                 required
                 type="text"
-                placeholder="Enter question in Russian"
-                name="question_ru"
-                id="question_ru"
+                placeholder="Enter position in Russian"
+                name="position_ru"
+                id="position_ru"
                 className="w-full p-2 border border-gray-300 rounded"
                 maxLength={200}
-                defaultValue={editedFaq?.question_ru ?? ""}
+                defaultValue={editedTeam?.position_ru ?? ""}
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="answer_ru" className="block text-gray-700">
-                Answer (Russian)
-              </label>
-              <textarea
-                required
-                placeholder="Enter answer in Russian"
-                name="answer_ru"
-                id="answer_ru"
-                className="w-full p-2 border border-gray-300 rounded"
-                maxLength={500}
-                defaultValue={editedFaq?.answer_ru ?? ""}
-              />
-            </div>
-
             <div className="mb-2">
-              <label htmlFor="question_de" className="block text-gray-700">
-                Question (German)
+              <label htmlFor="position_de" className="block text-gray-700">
+                Position (DE)
               </label>
               <input
                 required
                 type="text"
-                placeholder="Enter question in German"
-                name="question_de"
-                id="question_de"
+                placeholder="Enter position in German"
+                name="position_de"
+                id="position_de"
                 className="w-full p-2 border border-gray-300 rounded"
-                defaultValue={editedFaq?.question_de ?? ""}
                 maxLength={200}
+                defaultValue={editedTeam?.position_de ?? ""}
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="answer_de" className="block text-gray-700">
-                Answer (German)
+            <div className="mb-2">
+              <label htmlFor="file" className="block text-gray-700">
+                Upload Image
               </label>
-              <textarea
+              <input
                 required
-                placeholder="Enter answer in German"
-                name="answer_de"
-                id="answer_de"
+                accept="image/*"
+                type="file"
+                name="file"
+                id="file"
                 className="w-full p-2 border border-gray-300 rounded"
-                defaultValue={editedFaq?.answer_de ?? ""}
-                maxLength={500}
               />
             </div>
 
@@ -253,21 +233,21 @@ const Team = () => {
               disabled={isLoading}
               className="w-full mt-2 text-white bg-green-500 p-2 text-center rounded-lg cursor-pointer disabled:cursor-progress disabled:bg-gray-400"
             >
-              {isLoading ? "Loading..." : editedFaq ? "Edit FAQ" : "Add FAQ"}
+              {isLoading ? "Loading..." : editedTeam ? "Edit Team" : "Add Team"}
             </button>
-          </form> */}
+          </form>
         </Modal>
       )}
 
       {/* Confirm Modal for Deleted Size */}
       {isConfirmDeleted && (
         <ConfirmToDeleteModal
-          type="FAQ"
+          type="team"
           isLoading={isLoading}
           closeModal={closeModal}
-          deleteFunc={() => deleteFaq(editedFaq?.id)}
+          deleteFunc={() => deleteTeam(editedTeam?.id)}
         >
-          {editedFaq?.question_en}
+          {editedTeam?.full_name} | {editedTeam?.position_en}
         </ConfirmToDeleteModal>
       )}
 
@@ -311,7 +291,7 @@ const Team = () => {
                     <button
                       onClick={() => {
                         setIsOpenModal(true);
-                        setEditedFaq({ ...team });
+                        setEditedTeam({ ...team });
                       }}
                       className="px-4 py-2 mr-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition cursor-pointer"
                     >
@@ -320,7 +300,7 @@ const Team = () => {
                     <button
                       onClick={() => {
                         setIsConfirmDeleted(true);
-                        setEditedFaq({ ...team });
+                        setEditedTeam({ ...team });
                       }}
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
                     >

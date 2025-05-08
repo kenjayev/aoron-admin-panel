@@ -7,7 +7,7 @@ import NoData from "../components/NoData";
 
 const News = () => {
   const [news, setNews] = useState(null);
-  const [editedFaq, setEditedFaq] = useState(null);
+  const [editedNews, setEditedNews] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isConfirmDeleted, setIsConfirmDeleted] = useState(false);
@@ -15,7 +15,7 @@ const News = () => {
 
   const closeModal = () => {
     setIsOpenModal(false);
-    setEditedFaq(null);
+    setEditedNews(null);
     setIsConfirmDeleted(false);
   };
 
@@ -36,109 +36,105 @@ const News = () => {
   };
   useEffect(getNews, []);
 
-  // // Add New Color
-  // const addFaq = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
+  const getDataForm = (e) => {
+    const dataForm = new FormData();
+    dataForm.append("title_en", e.target.title_en.value);
+    dataForm.append("title_ru", e.target.title_ru.value);
+    dataForm.append("title_de", e.target.title_de.value);
+    dataForm.append("description_en", e.target.description_en.value);
+    dataForm.append("description_ru", e.target.description_ru.value);
+    dataForm.append("description_de", e.target.description_de.value);
+    dataForm.append("file", e.target.file.files[0]);
+    return dataForm;
+  };
 
-  //   fetch("https://back.ifly.com.uz/api/faq", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       question_en: e.target.question_en.value,
-  //       question_ru: e.target.question_ru.value,
-  //       question_de: e.target.question_de.value,
-  //       answer_en: e.target.answer_en.value,
-  //       answer_ru: e.target.answer_ru.value,
-  //       answer_de: e.target.answer_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("FAQ added successfuly");
-  //         closeModal();
-  //         getFaq();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(res.message.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+  // Add New Color
+  const addNews = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  // // Edit Color
-  // const editFaq = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/faq/${editedFaq?.id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     body: JSON.stringify({
-  //       question_en: e.target.question_en.value,
-  //       question_ru: e.target.question_ru.value,
-  //       question_de: e.target.question_de.value,
-  //       answer_en: e.target.answer_en.value,
-  //       answer_ru: e.target.answer_ru.value,
-  //       answer_de: e.target.answer_de.value,
-  //     }),
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         toast.success("FAQ edited Successfuly");
-  //         closeModal();
-  //         getFaq();
-  //       } else {
-  //         toast.error("Something want Error");
-  //         toast.error(data.message?.message);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something want Error");
-  //       toast.error(err.message);
-  //       toast.error(err);
-  //       setIsLoading(false);
-  //     });
-  // };
+    fetch("https://back.ifly.com.uz/api/news", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: getDataForm(e),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("News added successfuly");
+          closeModal();
+          getNews();
+        } else {
+          toast.error("Something want Error");
+          toast.error(res.message.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
 
-  // // Delete Color Func
-  // const deleteFaq = (id) => {
-  //   setIsLoading(true);
-  //   fetch(`https://back.ifly.com.uz/api/faq/${id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then((req) => req.json())
-  //     .then((req) => {
-  //       if (req.success) {
-  //         toast.success("Deleted FAQ successfuly");
-  //         getFaq();
-  //       } else {
-  //         toast.error(req.message.message);
-  //       }
-  //     })
-  //     .catch((error) => toast.error(error.message))
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //       closeModal();
-  //     });
-  // };
+  // Edit Color
+  const editNews = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/news/${editedNews?.id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: getDataForm(e),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("News edited Successfuly");
+          closeModal();
+          getNews();
+        } else {
+          toast.error("Something want Error");
+          toast.error(data.message?.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something want Error");
+        toast.error(err.message);
+        toast.error(err);
+        setIsLoading(false);
+      });
+  };
+
+  // Delete Color Func
+  const deleteNews = (id) => {
+    setIsLoading(true);
+    fetch(`https://back.ifly.com.uz/api/news/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((req) => req.json())
+      .then((req) => {
+        if (req.success) {
+          toast.success("Deleted news successfuly");
+          getNews();
+        } else {
+          toast.error(req.message.message);
+        }
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
+        closeModal();
+      });
+  };
 
   return (
     <section className="bg-white p-6 rounded-lg shadow-md">
@@ -155,119 +151,140 @@ const News = () => {
       {isOpenModal && (
         <Modal closeFunc={closeModal}>
           <h3 className="text-xl font-bold mb-4">
-            {editedFaq ? "Edit" : "Add"} FAQ
+            {editedNews ? "Edit" : "Add"} News
           </h3>
 
-          {/* <form onSubmit={editedFaq ? editFaq : addFaq}>
-            <div className="mb-2">
-              <label htmlFor="question_en" className="block text-gray-700">
-                Question (English)
-              </label>
-              <input
-                required
-                type="text"
-                placeholder="Enter question in English"
-                defaultValue={editedFaq?.question_en ?? ""}
-                name="question_en"
-                id="question_en"
-                className="w-full p-2 border border-gray-300 rounded"
-                maxLength={200}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="answer_en" className="block text-gray-700">
-                Answer (English)
-              </label>
-              <textarea
-                required
-                placeholder="Enter answer in English"
-                name="answer_en"
-                id="answer_en"
-                className="w-full p-2 border border-gray-300 rounded"
-                maxLength={500}
-                defaultValue={editedFaq?.answer_en ?? ""}
-              />
-            </div>
+          <form onSubmit={editedNews ? editNews : addNews}>
+            <div className="w-full max-h-[70vh] overflow-x-hidden overflow-y-auto custom-scrollbar">
+              {/******************** Start TITLES & DESCRIPTION IN English  *****************/}
+              <div className="mb-2">
+                <label htmlFor="title_en" className="block text-gray-700">
+                  Title (EN)
+                </label>
+                <input
+                  required
+                  type="text"
+                  name="title_en"
+                  id="title_en"
+                  placeholder="Enter News title in English"
+                  defaultValue={editedNews?.title_en ?? ""}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="description_en" className="block text-gray-700">
+                  Description (EN)
+                </label>
+                <textarea
+                  required
+                  placeholder="Enter news description in English"
+                  name="description_en"
+                  id="description_en"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  maxLength={500}
+                  defaultValue={editedNews?.description_en ?? ""}
+                />
+              </div>
+              {/******************** End TITLES & DESCRIPTION IN English  *****************/}
 
-            <div className="mb-2">
-              <label htmlFor="question_ru" className="block text-gray-700">
-                Question (Russian)
-              </label>
-              <input
-                required
-                type="text"
-                placeholder="Enter question in Russian"
-                name="question_ru"
-                id="question_ru"
-                className="w-full p-2 border border-gray-300 rounded"
-                maxLength={200}
-                defaultValue={editedFaq?.question_ru ?? ""}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="answer_ru" className="block text-gray-700">
-                Answer (Russian)
-              </label>
-              <textarea
-                required
-                placeholder="Enter answer in Russian"
-                name="answer_ru"
-                id="answer_ru"
-                className="w-full p-2 border border-gray-300 rounded"
-                maxLength={500}
-                defaultValue={editedFaq?.answer_ru ?? ""}
-              />
-            </div>
+              {/******************** Start TITLES & DESCRIPTION IN Russian  *****************/}
+              <div className="mb-3">
+                <label htmlFor="title_ru" className="block text-gray-700">
+                  Title (RU)
+                </label>
+                <input
+                  required
+                  type="text"
+                  name="title_ru"
+                  id="title_ru"
+                  placeholder="Enter News title in Russian"
+                  defaultValue={editedNews?.title_ru ?? ""}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="description_ru" className="block text-gray-700">
+                  Description (RU)
+                </label>
+                <textarea
+                  required
+                  placeholder="Enter news description in Russian"
+                  name="description_ru"
+                  id="description_ru"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  maxLength={500}
+                  defaultValue={editedNews?.description_ru ?? ""}
+                />
+              </div>
+              {/******************** End TITLES & DESCRIPTION IN Russian  *****************/}
 
-            <div className="mb-2">
-              <label htmlFor="question_de" className="block text-gray-700">
-                Question (German)
-              </label>
-              <input
-                required
-                type="text"
-                placeholder="Enter question in German"
-                name="question_de"
-                id="question_de"
-                className="w-full p-2 border border-gray-300 rounded"
-                defaultValue={editedFaq?.question_de ?? ""}
-                maxLength={200}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="answer_de" className="block text-gray-700">
-                Answer (German)
-              </label>
-              <textarea
-                required
-                placeholder="Enter answer in German"
-                name="answer_de"
-                id="answer_de"
-                className="w-full p-2 border border-gray-300 rounded"
-                defaultValue={editedFaq?.answer_de ?? ""}
-                maxLength={500}
-              />
+              {/******************** Start TITLES & DESCRIPTION IN German  *****************/}
+              <div className="mb-2">
+                <label htmlFor="title_de" className="block text-gray-700">
+                  Title (DE)
+                </label>
+                <input
+                  required
+                  type="text"
+                  name="title_de"
+                  id="title_de"
+                  placeholder="Enter News title in German"
+                  defaultValue={editedNews?.title_de ?? ""}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="description_de" className="block text-gray-700">
+                  Description (EN)
+                </label>
+                <textarea
+                  required
+                  placeholder="Enter news description in German"
+                  name="description_de"
+                  id="description_de"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  maxLength={500}
+                  defaultValue={editedNews?.description_de ?? ""}
+                />
+              </div>
+              {/******************** End TITLES & DESCRIPTION IN German  *****************/}
+
+              {/******************** Start Upload File Input  *****************/}
+              <div className="mb-3">
+                <label htmlFor="file" className="block text-gray-700">
+                  Upload Image
+                </label>
+                <input
+                  required
+                  accept="image/*"
+                  type="file"
+                  name="file"
+                  id="file"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+              {/******************** End Upload File Input  *****************/}
             </div>
 
             <button
               disabled={isLoading}
               className="w-full mt-2 text-white bg-green-500 p-2 text-center rounded-lg cursor-pointer disabled:cursor-progress disabled:bg-gray-400"
             >
-              {isLoading ? "Loading..." : editedFaq ? "Edit FAQ" : "Add FAQ"}
+              {isLoading ? "Loading..." : editedNews ? "Edit News" : "Add News"}
             </button>
-          </form> */}
+          </form>
         </Modal>
       )}
 
       {/* Confirm Modal for Deleted Size */}
       {isConfirmDeleted && (
         <ConfirmToDeleteModal
-          type="FAQ"
+          type="news"
           isLoading={isLoading}
           closeModal={closeModal}
-          deleteFunc={() => deleteFaq(editedFaq?.id)}
+          deleteFunc={() => deleteNews(editedNews?.id)}
         >
-          {editedFaq?.question_en}
+          {editedNews?.title_en} | {editedNews?.description_en}
         </ConfirmToDeleteModal>
       )}
 
@@ -311,7 +328,7 @@ const News = () => {
                     <button
                       onClick={() => {
                         setIsOpenModal(true);
-                        setEditedFaq({ ...news });
+                        setEditedNews({ ...news });
                       }}
                       className="px-4 py-2 mr-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition cursor-pointer"
                     >
@@ -320,7 +337,7 @@ const News = () => {
                     <button
                       onClick={() => {
                         setIsConfirmDeleted(true);
-                        setEditedFaq({ ...news });
+                        setEditedNews({ ...news });
                       }}
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
                     >

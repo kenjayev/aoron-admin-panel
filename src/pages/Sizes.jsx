@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Sizes = () => {
   const [size, setSize] = useState(null);
@@ -22,7 +23,7 @@ const Sizes = () => {
   // getSize
   const getSize = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/sizes")
+    fetch("https://testaoron.limsa.uz/api/sizes")
       .then((data) => data.json())
       .then((data) => {
         data.success ? setSize(data.data) : toast.error("Something want Error");
@@ -40,7 +41,7 @@ const Sizes = () => {
   const addSize = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/sizes", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/sizes", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -72,7 +73,7 @@ const Sizes = () => {
   const editSize = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/sizes/${editedSize?.id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/sizes/${editedSize?.id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -103,7 +104,7 @@ const Sizes = () => {
   // Delete Size Func
   const deleteSize = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/sizes/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/sizes/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

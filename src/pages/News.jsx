@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const News = () => {
   const [news, setNews] = useState(null);
@@ -22,7 +23,7 @@ const News = () => {
   // getSize
   const getNews = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/news")
+    fetch("https://testaoron.limsa.uz/api/news")
       .then((data) => data.json())
       .then((data) => {
         data.success ? setNews(data.data) : toast.error("Something want error");
@@ -53,7 +54,7 @@ const News = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("https://back.ifly.com.uz/api/news", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/news", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -84,7 +85,7 @@ const News = () => {
   const editNews = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/news/${editedNews?.id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/news/${editedNews?.id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -114,7 +115,7 @@ const News = () => {
   // Delete Color Func
   const deleteNews = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/news/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/news/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -314,7 +315,7 @@ const News = () => {
                   <td className="border border-gray-300 p-2 cursor-pointer w-30 h-22">
                     <img
                       className="w-24 h-18 object-cover mx-auto rounded-sm"
-                      src={`https://back.ifly.com.uz/${news.image}`}
+                      src={`https://testaoron.limsa.uz/${news.image}`}
                       alt={news.title_en}
                     />
                   </td>

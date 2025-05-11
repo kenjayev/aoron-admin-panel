@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Faq = () => {
   const [faq, setFaq] = useState(null);
@@ -22,7 +23,7 @@ const Faq = () => {
   // getSize
   const getFaq = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/faq")
+    fetch("https://testaoron.limsa.uz/api/faq")
       .then((data) => data.json())
       .then((data) => {
         data.success ? setFaq(data.data) : toast.error("Something want Error");
@@ -41,7 +42,7 @@ const Faq = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("https://back.ifly.com.uz/api/faq", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/faq", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -80,7 +81,7 @@ const Faq = () => {
   const editFaq = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/faq/${editedFaq?.id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/faq/${editedFaq?.id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -118,7 +119,7 @@ const Faq = () => {
   // Delete Color Func
   const deleteFaq = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/faq/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/faq/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

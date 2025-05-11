@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Category = () => {
   const [category, setCategory] = useState([]);
@@ -19,7 +20,7 @@ const Category = () => {
   // Get category
   const getCategory = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/category")
+    fetch("https://testaoron.limsa.uz/api/category")
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -41,7 +42,7 @@ const Category = () => {
       name_ru: e.target.name_ru.value,
       name_de: e.target.name_de.value,
     });
-    fetch("https://back.ifly.com.uz/api/category", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/category", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -74,14 +75,17 @@ const Category = () => {
       name_ru: e.target.name_ru.value,
       name_de: e.target.name_de.value,
     });
-    fetch(`https://back.ifly.com.uz/api/category/${editedCategory.id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body,
-    })
+    fetchWithAuth(
+      `https://testaoron.limsa.uz/api/category/${editedCategory.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body,
+      }
+    )
       .then((data) => data.json())
       .then((data) => {
         if (data.success) {
@@ -99,7 +103,7 @@ const Category = () => {
 
   // Delete Category
   const deleteCategory = (id) => {
-    fetch(`https://back.ifly.com.uz/api/category/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/category/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

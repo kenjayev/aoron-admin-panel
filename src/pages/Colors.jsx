@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Colors = () => {
   const [colors, setColors] = useState(null);
@@ -22,7 +23,7 @@ const Colors = () => {
   // getSize
   const getColors = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/colors")
+    fetch("https://testaoron.limsa.uz/api/colors")
       .then((data) => data.json())
       .then((data) => {
         data.success
@@ -42,7 +43,7 @@ const Colors = () => {
   const addColor = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/colors", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/colors", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -78,7 +79,7 @@ const Colors = () => {
   const editColor = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/colors/${editedColor?.id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/colors/${editedColor?.id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -113,7 +114,7 @@ const Colors = () => {
   // Delete Color Func
   const deleteColor = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/colors/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/colors/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

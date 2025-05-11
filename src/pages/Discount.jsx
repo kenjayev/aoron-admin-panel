@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Discount = () => {
   const [discount, setDiscount] = useState([]);
@@ -22,7 +23,7 @@ const Discount = () => {
   // get discount
   const getDiscount = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/discount")
+    fetch("https://testaoron.limsa.uz/api/discount")
       .then((req) => req.json())
       .then((data) => {
         data.success
@@ -44,7 +45,7 @@ const Discount = () => {
       finished_at: e.target.finished_at.value,
       status: e.target.status.checked,
     });
-    fetch("https://back.ifly.com.uz/api/discount", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/discount", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -80,14 +81,17 @@ const Discount = () => {
       finished_at: e.target.finished_at.value,
       status: e.target.status.checked,
     });
-    fetch(`https://back.ifly.com.uz/api/discount/${editedDiscount.id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body,
-    })
+    fetchWithAuth(
+      `https://testaoron.limsa.uz/api/discount/${editedDiscount.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body,
+      }
+    )
       .then((data) => data.json())
       .then((data) => {
         if (data.success) {
@@ -113,7 +117,7 @@ const Discount = () => {
   // Delete Discount
   const deleteDiscount = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/discount/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/discount/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

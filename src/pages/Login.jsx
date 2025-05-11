@@ -17,7 +17,7 @@ const Login = () => {
   const loginHandler = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/auth/login", {
+    fetch("https://testaoron.limsa.uz/api/auth/login", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -30,6 +30,7 @@ const Login = () => {
         if (req.success) {
           toast.success(req.data.message);
           localStorage.setItem("access_token", req.data.access_token);
+          localStorage.setItem("refresh_token", req.data.refresh_token);
           navigate("/");
         } else {
           toast.error(req.message.message);

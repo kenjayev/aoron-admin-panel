@@ -4,6 +4,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Team = () => {
   const [team, setTeam] = useState(null);
@@ -22,7 +23,7 @@ const Team = () => {
   // getSize
   const getTeam = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/team-section")
+    fetch("https://testaoron.limsa.uz/api/team-section")
       .then((data) => data.json())
       .then((data) => {
         data.success ? setTeam(data.data) : toast.error("Something want Error");
@@ -53,7 +54,7 @@ const Team = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("https://back.ifly.com.uz/api/team-section", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/team-section", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -84,13 +85,16 @@ const Team = () => {
   const editTeam = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/team-section/${editedTeam?.id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: getDataForm(e),
-    })
+    fetchWithAuth(
+      `https://testaoron.limsa.uz/api/team-section/${editedTeam?.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: getDataForm(e),
+      }
+    )
       .then((data) => data.json())
       .then((data) => {
         if (data.success) {
@@ -114,7 +118,7 @@ const Team = () => {
   // Delete Color Func
   const deleteTeam = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/team-section/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/team-section/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -277,7 +281,7 @@ const Team = () => {
                   <td className="border border-gray-300 p-2 cursor-pointer w-[150px] h-[100px]">
                     <img
                       className="w-full h-full rounded-sm"
-                      src={`https://back.ifly.com.uz/${team.image}`}
+                      src={`https://testaoron.limsa.uz/${team.image}`}
                       alt={team.full_name}
                     />
                   </td>

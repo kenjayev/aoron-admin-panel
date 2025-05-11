@@ -6,6 +6,7 @@ import ConfirmToDeleteModal from "../components/ConfirmToDeleteModal";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import NoData from "../components/NoData";
+import { fetchWithAuth } from "../services/fetchWithAuth";
 
 const Contact = () => {
   const [contacts, setContacts] = useState(null);
@@ -25,7 +26,7 @@ const Contact = () => {
   // getSize
   const getContact = () => {
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/contact")
+    fetch("https://testaoron.limsa.uz/api/contact")
       .then((data) => data.json())
       .then((data) => {
         data.success
@@ -45,7 +46,7 @@ const Contact = () => {
   const addContact = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch("https://back.ifly.com.uz/api/contact", {
+    fetchWithAuth("https://testaoron.limsa.uz/api/contact", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -84,20 +85,23 @@ const Contact = () => {
   const editContact = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/contact/${editedContact?.id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        phone_number: `+${phoneNumber}`,
-        email: e.target.email.value,
-        address_ru: e.target.address_ru.value,
-        address_en: e.target.address_en.value,
-        address_de: e.target.address_de.value,
-      }),
-    })
+    fetchWithAuth(
+      `https://testaoron.limsa.uz/api/contact/${editedContact?.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          phone_number: `+${phoneNumber}`,
+          email: e.target.email.value,
+          address_ru: e.target.address_ru.value,
+          address_en: e.target.address_en.value,
+          address_de: e.target.address_de.value,
+        }),
+      }
+    )
       .then((data) => data.json())
       .then((data) => {
         if (data.success) {
@@ -122,7 +126,7 @@ const Contact = () => {
   // Delete Color Func
   const deleteContact = (id) => {
     setIsLoading(true);
-    fetch(`https://back.ifly.com.uz/api/contact/${id}`, {
+    fetchWithAuth(`https://testaoron.limsa.uz/api/contact/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,
